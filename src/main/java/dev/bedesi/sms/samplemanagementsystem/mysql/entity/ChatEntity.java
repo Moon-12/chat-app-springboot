@@ -5,17 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name="SAMPLE")
+import java.sql.Timestamp;
+
+@Entity(name="CHAT_MESSAGE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SampleEntity {
+public class ChatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "roll_no")
-    private String rollNo;
-    private String name;
+    @Column(name="created_by")
+    private String createdBy;
+    @Column(name="created_at")
+    private Timestamp createdAt;
+    @Column(name="message")
+    private String message;
+    @Column(name="active")
     private Boolean active=true;
 
 }
