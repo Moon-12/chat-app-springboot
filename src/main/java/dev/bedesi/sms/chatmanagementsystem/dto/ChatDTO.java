@@ -1,6 +1,6 @@
-package dev.bedesi.sms.samplemanagementsystem.dto;
+package dev.bedesi.sms.chatmanagementsystem.dto;
 
-import dev.bedesi.sms.samplemanagementsystem.mysql.entity.ChatEntity;
+import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import lombok.Data;
 
 import java.sql.Timestamp;

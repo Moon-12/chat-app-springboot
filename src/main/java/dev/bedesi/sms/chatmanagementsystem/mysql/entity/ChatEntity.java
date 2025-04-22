@@ -1,4 +1,4 @@
-package dev.bedesi.sms.samplemanagementsystem.mysql.entity;
+package dev.bedesi.sms.chatmanagementsystem.mysql.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

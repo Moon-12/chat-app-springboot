@@ -1,6 +1,6 @@
-package dev.bedesi.sms.samplemanagementsystem.mysql.repository;
+package dev.bedesi.sms.chatmanagementsystem.mysql.repository;
 
-import dev.bedesi.sms.samplemanagementsystem.mysql.entity.ChatEntity;
+import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

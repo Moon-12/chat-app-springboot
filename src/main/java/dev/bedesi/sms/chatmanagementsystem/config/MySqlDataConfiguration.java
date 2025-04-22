@@ -1,4 +1,4 @@
-package dev.bedesi.sms.samplemanagementsystem.config;
+package dev.bedesi.sms.chatmanagementsystem.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package dev.bedesi.sms.samplemanagementsystem;
+package dev.bedesi.sms.chatmanagementsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.Properties;
 
 @SpringBootApplication
-public class SamplemanagementsystemApplication {
+public class ChatManagementSystemApplication {
 
 	public static void main(String[] args) {
 
@@ -19,6 +19,6 @@ public class SamplemanagementsystemApplication {
 			String value = systemProperties.getProperty(key);
 			System.out.println(key + " = " + value);
 		}
-		SpringApplication.run(SamplemanagementsystemApplication.class, args);
+		SpringApplication.run(ChatManagementSystemApplication.class, args);
 	}
 }

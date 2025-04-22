@@ -1,6 +1,6 @@
-package dev.bedesi.sms.samplemanagementsystem.service;
-import dev.bedesi.sms.samplemanagementsystem.mysql.entity.ChatEntity;
-import dev.bedesi.sms.samplemanagementsystem.mysql.repository.ChatRepository;
+package dev.bedesi.sms.chatmanagementsystem.service;
+import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
+import dev.bedesi.sms.chatmanagementsystem.mysql.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
