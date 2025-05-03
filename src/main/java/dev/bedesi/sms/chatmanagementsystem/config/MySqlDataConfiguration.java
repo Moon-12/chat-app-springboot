@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages ="dev.bedesi.sms.samplemanagementsystem.mysql")
+@EnableJpaRepositories(basePackages ="dev.bedesi.sms.chatmanagementsystem.mysql")
 public class MySqlDataConfiguration {
 
     @Bean

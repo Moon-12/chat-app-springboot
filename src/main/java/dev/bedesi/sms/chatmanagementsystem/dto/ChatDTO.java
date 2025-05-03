@@ -8,8 +8,10 @@ import java.sql.Timestamp;
 @Data
 public class ChatDTO implements TranslateDTO<ChatEntity> {
     private int id;
+    private String message;
     private String createdBy;
     private Timestamp createdAt;
+
 
 
     @Override
@@ -17,6 +19,7 @@ public class ChatDTO implements TranslateDTO<ChatEntity> {
         this.id=chatEntity.getId();
         this.createdBy=chatEntity.getCreatedBy();
         this.createdAt=chatEntity.getCreatedAt();
+        this.message=chatEntity.getMessage();
 
     }
 }

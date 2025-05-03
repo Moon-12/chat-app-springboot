@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-@Entity(name="CHAT_MESSAGE")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="CHAT_MESSAGE")
 public class ChatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

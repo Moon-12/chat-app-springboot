@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<ChatEntity,Integer> {
-    @Query("SELECT * FROM CHAT_MESSAGE c WHERE c.active = true")
+    @Query("SELECT c FROM ChatEntity c WHERE c.active = true")
     Optional<List<ChatEntity>> findAllActive();
 }
