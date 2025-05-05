@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.bedesi.sms</groupId>
-    <artifactId>schoolmanagementsystem</artifactId>
+    <artifactId>chatmanagementsystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>schoolmanagementsystem</name>
     <description>Demo project for School Management System</description>

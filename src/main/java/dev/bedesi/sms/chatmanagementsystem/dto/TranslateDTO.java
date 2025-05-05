@@ -1,4 +1,4 @@
-package dev.bedesi.sms.samplemanagementsystem.dto;
+package dev.bedesi.sms.chatmanagementsystem.dto;
 
 public interface TranslateDTO<T> {
     void setAllFieldsFromEntity(T entity);

@@ -1,10 +1,10 @@
-package dev.bedesi.sms.samplemanagementsystem;
+package dev.bedesi.sms.chatmanagementsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SchoolmanagementsystemApplicationTests {
+class ChatmanagementsystemApplicationTests {
 
 	@Test
 	void contextLoads() {
