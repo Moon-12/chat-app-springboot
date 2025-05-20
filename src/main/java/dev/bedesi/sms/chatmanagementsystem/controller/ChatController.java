@@ -5,6 +5,8 @@ import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import dev.bedesi.sms.chatmanagementsystem.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -30,7 +32,7 @@ public class ChatController {
             return ResponseEntity.notFound().build();
         }
     }
-
+/*
     @PostMapping("/postMessage")
     public ResponseEntity<?> createSampleEntity(@RequestBody ChatEntity chatEntity) {
         ChatDTO chatDTO=chatService.createChatEntity(chatEntity);
@@ -38,6 +40,12 @@ public class ChatController {
         response.put("data",chatDTO);
         return ResponseEntity.ok(response);
     }
-
+*/
+    //socket api
+    @MessageMapping("/postMessage")
+    @SendTo("/topic/chat")
+    public ChatDTO postMessage(ChatEntity chatEntity) {
+        return chatService.createChatEntity(chatEntity);
+    }
 
 }
