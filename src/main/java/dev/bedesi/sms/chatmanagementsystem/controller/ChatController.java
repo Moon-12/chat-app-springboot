@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("chat")
-@CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
     @Autowired
     ChatService chatService;
