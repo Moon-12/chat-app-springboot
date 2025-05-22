@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("chat")
+@RequestMapping("chat-app-api")
 public class LoginController {
     @PostMapping("/login")
-    public ResponseEntity<?> createSampleEntity(@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<?> loginApp(@RequestBody LoginRequestDTO loginRequest) {
         Map<String, Object> response = new HashMap<>();
         if (loginRequest.getPassword().equals(System.getenv("APP_PASSWORD"))) {
             response.put("message", "Login Successful");
