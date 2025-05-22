@@ -11,7 +11,7 @@ import java.util.Map;
 @RequestMapping("chat-app-api")
 public class LoginController {
     @PostMapping("/login")
-    public ResponseEntity<?> createSampleEntity(@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<?> loginApp(@RequestBody LoginRequestDTO loginRequest) {
         Map<String, Object> response = new HashMap<>();
         if (loginRequest.getPassword().equals(System.getenv("APP_PASSWORD"))) {
             response.put("message", "Login Successful");
