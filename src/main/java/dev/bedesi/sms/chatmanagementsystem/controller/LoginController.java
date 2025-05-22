@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("chat")
+@RequestMapping("chat-app-api")
 public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> createSampleEntity(@RequestBody LoginRequestDTO loginRequest) {

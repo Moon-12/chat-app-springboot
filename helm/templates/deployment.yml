@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: springboot-chat
-          image: 192.168.0.147:30008/chat-spboot:v0.0.0
+          image: 192.168.0.147:30008/chat-spboot:v0.0.2
           ports:
             - containerPort: 8080
           resources:
