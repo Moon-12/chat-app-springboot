@@ -1,0 +1,5 @@
+oracle2:
+  url: jdbc:mysql://twinkle-mysql-service.twinkle-ns:3306/chat_db
+  username: root
+  driver: com.mysql.cj.jdbc.Driver
+  dialect: org.hibernate.dialect.MySQL8Dialect

@@ -27,6 +27,8 @@ spec:
               cpu: '200m'
               memory: '256Mi'
           env:
+            - name: CHAT_APP_PROFILE
+              value: prod
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
