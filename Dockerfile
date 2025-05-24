@@ -10,4 +10,4 @@ FROM openjdk:17-slim
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8090
-ENTRYPOINT ["java", "-jar", "app.jar","spring.profiles.active=${CHAT_APP_PROFILE}"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
