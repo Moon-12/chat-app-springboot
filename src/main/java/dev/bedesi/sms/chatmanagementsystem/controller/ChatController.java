@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("chat-app-api")
 public class ChatController {
     @Autowired
     ChatService chatService;
