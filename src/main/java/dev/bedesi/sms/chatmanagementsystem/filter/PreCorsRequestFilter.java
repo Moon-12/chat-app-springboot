@@ -69,7 +69,7 @@ public class PreCorsRequestFilter implements Filter {
     }
     private boolean isValidHeader(String headerValue) {
         // Add your validation logic here (e.g., check for specific values)
-        return headerValue != null && !headerValue.isEmpty() && headerValue.equals(System.getenv("APP_PASSWORD"));
+        return headerValue != null && !headerValue.isEmpty() && headerValue.equals(System.getenv("SERVER_KEY"));
     }
 
     private void logRequestMetadata(HttpServletRequest request) {
