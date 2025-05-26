@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-chat
+  name: {{ .Chart.Name }}-deployment
   labels:
-    app: springboot-chat
+    app: {{ .Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: springboot-chat
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: springboot-chat
+        app: {{ .Chart.Name }}
     spec:
       containers:
-        - name: springboot-chat
-          image: 192.168.0.147:30008/{{ .Chart.name }}:{{ .Chart.AppVersion }}
+        - name: {{ .Chart.Name }}-container
+          image: 192.168.0.147:30008/{{ .Chart.Name }}:{{ .Chart.AppVersion }}
           ports:
             - containerPort: 8080
           resources:
