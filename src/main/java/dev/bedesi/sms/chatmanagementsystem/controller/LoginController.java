@@ -12,7 +12,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> loginApp(@RequestBody LoginRequestDTO loginRequest) {
         Map<String, Object> response = new HashMap<>();
-        if (loginRequest.getPassword().equals(System.getenv("APP_PASSWORD"))) {
+        if (loginRequest.getPassword().equals(System.getenv("SERVER_KEY"))) {
             response.put("message", "Login Successful");
             return ResponseEntity.ok(response);
         } else {
