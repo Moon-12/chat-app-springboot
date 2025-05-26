@@ -32,8 +32,10 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: springboot-chat-secrets
-                  key: MYSQL_PASSWORD
-          envFrom:
-            - configMapRef:
-                name: springboot-chat-config
+                  name: chat-secrets
+                  key: mysql_secret
+            - name: SERVER_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-config-map
+                  key: server_key

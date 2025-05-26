@@ -12,19 +12,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> loginApp(@RequestBody LoginRequestDTO loginRequest) {
         Map<String, Object> response = new HashMap<>();
-        if (loginRequest.getPassword().equals(System.getenv("APP_PASSWORD"))) {
-            response.put("message", "Login Successful");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "Invalid Credentials");
-            return  ResponseEntity.status(401).body(response);
-        }
-
-    }
-    @GetMapping("/login")
-    public ResponseEntity<?> loginApp2(@RequestBody LoginRequestDTO loginRequest) {
-        Map<String, Object> response = new HashMap<>();
-        if (loginRequest.getPassword().equals(System.getenv("APP_PASSWORD"))) {
+        if (loginRequest.getPassword().equals(System.getenv("SERVER_KEY"))) {
             response.put("message", "Login Successful");
             return ResponseEntity.ok(response);
         } else {
