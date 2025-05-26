@@ -1,5 +1,5 @@
 apiVersion: v2
-name: Chat Management System
+name: chat-management-system
 description: A Helm chart for Chat Management System
 
 # A chart can be either an 'application' or a 'library' chart.

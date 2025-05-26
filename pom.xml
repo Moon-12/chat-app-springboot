@@ -11,7 +11,7 @@
     <groupId>dev.bedesi.sms</groupId>
     <artifactId>chatmanagementsystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Chat Management System</name>
+    <name>chat-management-system</name>
     <description>Socket Demo project for Chat Management System</description>
     <url/>
     <licenses>
