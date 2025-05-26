@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @Component
 @WebFilter("/*")
@@ -23,14 +24,32 @@ public class PreCorsRequestFilter implements Filter {
             throws IOException, ServletException {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-
+        String method = httpRequest.getMethod();
         // Example: Logging or checking headers
-        System.out.println("Incoming request to: " + httpRequest.getRequestURI());
+        String requestURI = httpRequest.getRequestURI();
+        System.out.println("Incoming request to: " + requestURI);
 
+        System.out.println("Request Headers:");
+        Enumeration<String> headerNames = httpRequest.getHeaderNames();
+        if (headerNames != null) {
+            while (headerNames.hasMoreElements()) {
+                String headerName = headerNames.nextElement();
+                String headerValue = httpRequest.getHeader(headerName);
+                System.out.println(headerName + ": " + headerValue);
+            }
+        }
+        // Skip token validation for WebSocket and SockJS-related requests
+        if(requestURI.startsWith("/chat-app-api/activeMessageListener")){
+            chain.doFilter(request, response);
+            return;
+        }
+        System.out.println(httpRequest.getHeader("Referer"));
         // You can also reject or modify the request before it reaches Spring
         // e.g., check a custom token, log, etc.
 
+
         // Check for x-auth-token header
+
         String authToken = httpRequest.getHeader("x-auth-token");
         if (authToken == null || authToken.isEmpty()) {
             logger.warn("Missing x-auth-token header for request to: {}", httpRequest.getRequestURI());
