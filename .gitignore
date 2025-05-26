@@ -15,6 +15,6 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-.idea
+.idea/
 helm/templates/ingress.yml
 helm/templates/config.yaml
