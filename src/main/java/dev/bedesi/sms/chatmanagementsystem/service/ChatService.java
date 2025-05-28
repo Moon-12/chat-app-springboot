@@ -17,8 +17,8 @@ public class ChatService {
     private ChatRepository chatRepository;
 
 
-    public Optional<List<ChatDTO>> getAllChatEntities() {
-        Optional<List<ChatEntity>> chatEntityList= chatRepository.findAllActive();
+    public Optional<List<ChatDTO>> getAllChatEntitiesByGroupId(Long groupId) {
+        Optional<List<ChatEntity>> chatEntityList= chatRepository.findAllActiveByGroupId(groupId);
         List<ChatDTO> chatDTOList=new ArrayList<>();
        if(chatEntityList.isPresent()){
            chatDTOList= chatEntityList.get().stream().map(chatEntity -> {

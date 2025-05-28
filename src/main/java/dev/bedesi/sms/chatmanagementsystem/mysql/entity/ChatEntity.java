@@ -24,5 +24,8 @@ public class ChatEntity {
     private String message;
     @Column(name="active")
     private Boolean active=true;
+    @Column(name="group_id")
+    private int groupId;
+
 
 }

@@ -19,9 +19,9 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    @GetMapping("/getAllPreviousMessages")
-    public ResponseEntity<?> getAllChatEntities() {
-        Optional<List<ChatDTO>> chatDTOList= chatService.getAllChatEntities();
+    @GetMapping("/getAllPreviousMessages/{group_id}")
+    public ResponseEntity<?> getAllPreviousMessagesByGroupId(@PathVariable("group_id") Long groupId) {
+        Optional<List<ChatDTO>> chatDTOList= chatService.getAllChatEntitiesByGroupId(groupId);
         if (chatDTOList.isPresent()) {
             Map<String, Object> response = new HashMap<>();
             response.put("data",chatDTOList);
@@ -43,6 +43,7 @@ public class ChatController {
     @MessageMapping("/postMessage")
     @SendTo("/topic/chat")
     public ChatDTO postMessage(ChatEntity chatEntity) {
+        System.out.println("chat en"+chatEntity);
         return chatService.createChatEntity(chatEntity);
     }
 
