@@ -19,8 +19,9 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    @GetMapping("/getAllPreviousMessages/{group_id}")
-    public ResponseEntity<?> getAllPreviousMessagesByGroupId(@PathVariable("group_id") Long groupId) {
+    @GetMapping("/getAllPreviousMessages/{group_id}/{user_id}")
+    public ResponseEntity<?> getAllPreviousMessagesByGroupId(@PathVariable("group_id") Long groupId,@PathVariable("user_id") String userId) {
+        System.out.println("user id"+userId);
         Optional<List<ChatDTO>> chatDTOList= chatService.getAllChatEntitiesByGroupId(groupId);
         if (chatDTOList.isPresent()) {
             Map<String, Object> response = new HashMap<>();
