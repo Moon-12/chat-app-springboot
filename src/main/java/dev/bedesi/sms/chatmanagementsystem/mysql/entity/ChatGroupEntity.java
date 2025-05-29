@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,5 +25,7 @@ public class ChatGroupEntity {
     private String createdBy;
     @Column(name="active")
     private Boolean active=true;
+    @OneToMany(mappedBy = "chatGroup", fetch = FetchType.LAZY)
+    private List<ChatGroupAccessEntity> groupAccessEntities;
 
 }

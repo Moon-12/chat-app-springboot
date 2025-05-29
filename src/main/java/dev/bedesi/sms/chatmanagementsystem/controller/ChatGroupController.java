@@ -1,6 +1,6 @@
 package dev.bedesi.sms.chatmanagementsystem.controller;
-import dev.bedesi.sms.chatmanagementsystem.dto.ChatGroupAccessDTO;
-import dev.bedesi.sms.chatmanagementsystem.service.ChatGroupAccessService;
+import dev.bedesi.sms.chatmanagementsystem.dto.ChatGroupDTO;
+import dev.bedesi.sms.chatmanagementsystem.service.ChatGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +13,14 @@ import java.util.Optional;
 @RestController
 public class ChatGroupController {
     @Autowired
-    ChatGroupAccessService chatGroupAccessService;
+    ChatGroupService chatGroupService;
 
     @GetMapping("/getAllChatGroups")
     public ResponseEntity<?> getChatGroupByUserId(@RequestParam("user_id") String user_id) {
-        Optional<List<ChatGroupAccessDTO>> chatGroupAccessDTOList= chatGroupAccessService.getAllChatGroupAccessEntitiesByUserId(user_id);
-        if (chatGroupAccessDTOList.isPresent()) {
+        Optional<List<ChatGroupDTO>> chatGroupDTOList= chatGroupService.getAllChatGroupEntitiesByUserId(user_id);
+        if (chatGroupDTOList.isPresent()) {
             Map<String, Object> response = new HashMap<>();
-            response.put("data",chatGroupAccessDTOList);
+            response.put("data",chatGroupDTOList);
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
