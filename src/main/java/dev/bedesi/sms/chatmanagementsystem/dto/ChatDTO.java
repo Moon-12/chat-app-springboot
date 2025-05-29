@@ -11,6 +11,7 @@ public class ChatDTO implements TranslateDTO<ChatEntity> {
     private String message;
     private String createdBy;
     private Timestamp createdAt;
+    private int groupId;
 
 
 
@@ -20,6 +21,7 @@ public class ChatDTO implements TranslateDTO<ChatEntity> {
         this.createdBy=chatEntity.getCreatedBy();
         this.createdAt=chatEntity.getCreatedAt();
         this.message=chatEntity.getMessage();
+        this.groupId=chatEntity.getGroupId();
 
     }
 }

@@ -11,21 +11,18 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="chat_message")
-public class ChatEntity {
+@Table(name="chat_group")
+public class ChatGroupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name="created_by")
-    private String createdBy;
+    @Column(name="name")
+    private String name;
     @Column(name="created_at")
     private Timestamp createdAt;
-    @Column(name="message")
-    private String message;
+    @Column(name="created_by")
+    private String createdBy;
     @Column(name="active")
     private Boolean active=true;
-    @Column(name="group_id")
-    private int groupId;
-
 
 }
