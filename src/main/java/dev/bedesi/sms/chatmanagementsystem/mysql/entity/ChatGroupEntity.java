@@ -1,9 +1,11 @@
 package dev.bedesi.sms.chatmanagementsystem.mysql.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -26,6 +28,8 @@ public class ChatGroupEntity {
     @Column(name="active")
     private Boolean active=true;
     @OneToMany(mappedBy = "chatGroup", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private List<ChatGroupAccessEntity> groupAccessEntities;
 
 }

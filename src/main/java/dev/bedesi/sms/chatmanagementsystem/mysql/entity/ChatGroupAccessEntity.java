@@ -1,9 +1,11 @@
 package dev.bedesi.sms.chatmanagementsystem.mysql.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -16,11 +18,13 @@ public class ChatGroupAccessEntity {
     private int id;
     @Column(name="user_id")
     private String userId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
+    @ToString.Exclude
+    @JsonBackReference
     private ChatGroupEntity chatGroup;
     @Column(name="active")
-    private Boolean active=true;
+    private Boolean active=false;
 
 
 }
