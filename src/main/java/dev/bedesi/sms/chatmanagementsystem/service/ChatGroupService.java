@@ -1,5 +1,6 @@
 package dev.bedesi.sms.chatmanagementsystem.service;
 import dev.bedesi.sms.chatmanagementsystem.dto.ChatGroupDTO;
+import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatGroupEntity;
 import dev.bedesi.sms.chatmanagementsystem.mysql.repository.ChatGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,10 @@ public class ChatGroupService {
             }).collect(Collectors.toList());
         }
         return Optional.of(chatGroupDTOList);
+    }
+
+    public Optional<ChatGroupEntity> checkGroupExists(int groupId){
+        return chatGroupRepository.findById(groupId);
     }
 
 }

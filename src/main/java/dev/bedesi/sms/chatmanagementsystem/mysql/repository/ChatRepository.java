@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<ChatEntity,Integer> {
     @Query("SELECT c FROM ChatEntity c WHERE c.active = true and c.groupId=:groupId")
-    Optional<List<ChatEntity>> findAllActiveByGroupId(long groupId);
+    Optional<List<ChatEntity>> findAllActiveByGroupId(int groupId);
 }

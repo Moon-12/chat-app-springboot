@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ChatGroupAccessRepository extends JpaRepository<ChatGroupAccessEntity,Integer> {
     @Query("SELECT c FROM ChatGroupAccessEntity c WHERE c.userId = :userId and c.chatGroup.id=:groupId")
     Optional<ChatGroupAccessEntity> findUserExists(@Param("groupId") int groupId, @Param("userId") String userId);
+    @Query("SELECT c FROM ChatGroupAccessEntity c WHERE c.userId = :userId and c.chatGroup.id=:groupId and c.active=true")
+    Optional <ChatGroupAccessEntity>findActiveUser(@Param("groupId") int groupId, @Param("userId") String userId);
 }

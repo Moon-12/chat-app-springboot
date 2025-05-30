@@ -15,16 +15,19 @@ public class ChatGroupAccessService {
     private ChatGroupAccessRepository chatGroupAccessRepository;
     @Autowired
     private ChatGroupRepository chatGroupRepository;
+    @Autowired
+    private ChatGroupService chatGroupService;
 
     public String joinGroup(JoinGroupDTO joinGroupRequestObj) {
         int groupId = joinGroupRequestObj.getGroupId();
         String userId = joinGroupRequestObj.getUserId();
 
         // Validate group existence
-        Optional<ChatGroupEntity> group = chatGroupRepository.findById(groupId);
-        if (!group.isPresent()) {
+        Optional<ChatGroupEntity> group= chatGroupService.checkGroupExists(groupId);
+        if (group.isEmpty()) {
             throw new IllegalArgumentException ("Group not found");
         }
+
 
         // Check if user already has access
         Optional<ChatGroupAccessEntity> access = chatGroupAccessRepository.findUserExists(groupId, userId);
@@ -40,5 +43,10 @@ public class ChatGroupAccessService {
         chatGroupAccessRepository.save(newAccess);
 
         return "Request sent";
+    }
+
+    public boolean checkUserAccess(int groupId,String userId){
+        Optional<ChatGroupAccessEntity> chatGroupAccessEntity = chatGroupAccessRepository.findActiveUser(groupId, userId);
+        return chatGroupAccessEntity.isPresent();
     }
 }

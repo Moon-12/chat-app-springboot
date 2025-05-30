@@ -1,6 +1,7 @@
 package dev.bedesi.sms.chatmanagementsystem.controller;
 
 import dev.bedesi.sms.chatmanagementsystem.dto.ChatDTO;
+import dev.bedesi.sms.chatmanagementsystem.dto.GetChatApiResponseDTO;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import dev.bedesi.sms.chatmanagementsystem.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -19,16 +18,15 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    @GetMapping("/getAllPreviousMessages/{group_id}/{user_id}")
-    public ResponseEntity<?> getAllPreviousMessagesByGroupId(@PathVariable("group_id") Long groupId,@PathVariable("user_id") String userId) {
-        System.out.println("user id"+userId);
-        Optional<List<ChatDTO>> chatDTOList= chatService.getAllChatEntitiesByGroupId(groupId);
-        if (chatDTOList.isPresent()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("data",chatDTOList);
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/getAllPreviousMessages")
+    public ResponseEntity<GetChatApiResponseDTO> getAllPreviousMessagesByGroupId(@RequestParam("user_id") String userId,@RequestParam("group_id") int groupId) {
+        try {
+            Optional<List<ChatDTO>> chatDTOList = chatService.getAllChatEntitiesByGroupId(groupId, userId);
+            return chatDTOList.map(chatDTOS -> ResponseEntity.ok(new GetChatApiResponseDTO(chatDTOS, "Messages retrieved successfully"))).orElseGet(() -> ResponseEntity.status(404).body(new GetChatApiResponseDTO("No messages found for the given group and user")));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new GetChatApiResponseDTO(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new GetChatApiResponseDTO("An error occurred while processing the request"));
         }
     }
 /*
