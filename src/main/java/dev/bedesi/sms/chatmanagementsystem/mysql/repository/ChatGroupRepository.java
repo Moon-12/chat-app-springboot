@@ -9,10 +9,11 @@ import java.util.Optional;
 
 public interface ChatGroupRepository extends JpaRepository<ChatGroupEntity, Integer> {
     @Query("SELECT cg.id, cg.name, " +
-            "CASE WHEN EXISTS (" +
-            "  SELECT 1 FROM ChatGroupAccessEntity cga " +
-            "  WHERE cga.chatGroup.id = cg.id AND cga.userId = :userId" +
-            ") THEN true ELSE false END " +
+            "CASE " +
+            "  WHEN NOT EXISTS (SELECT 1 FROM ChatGroupAccessEntity cga WHERE cga.chatGroup.id = cg.id AND cga.userId = :userId) THEN 'NO_ACCESS' " +
+            "  WHEN EXISTS (SELECT 1 FROM ChatGroupAccessEntity cga WHERE cga.chatGroup.id = cg.id AND cga.userId = :userId AND cga.active = false) THEN 'PENDING' " +
+            "  WHEN EXISTS (SELECT 1 FROM ChatGroupAccessEntity cga WHERE cga.chatGroup.id = cg.id AND cga.userId = :userId AND cga.active = true) THEN 'ALLOWED' " +
+            "END as accessStatus " +
             "FROM ChatGroupEntity cg")
     Optional<List<Object[]>> findGroupByUserAccess(@Param("userId") String userId);
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 public class ChatGroupDTO implements TranslateDTO<ChatGroupEntity> {
     private String name;
     private  int id;
-    private boolean activeAccess;
+    private String activeAccess;
     @Override
     public void setAllFieldsFromEntity(ChatGroupEntity chatGroupEntity) {
         this.id=chatGroupEntity.getId();
@@ -17,6 +17,6 @@ public class ChatGroupDTO implements TranslateDTO<ChatGroupEntity> {
     public void setFieldsFromQueryResult(Object[] queryResult) {
         this.id = (Integer) queryResult[0];
         this.name = (String) queryResult[1];
-        this.activeAccess = (Boolean) queryResult[2];
+        this.activeAccess = (String) queryResult[2];
     }
 }
