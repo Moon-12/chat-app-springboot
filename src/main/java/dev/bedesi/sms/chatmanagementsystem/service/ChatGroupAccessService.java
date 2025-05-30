@@ -27,21 +27,17 @@ public class ChatGroupAccessService {
         if (group.isEmpty()) {
             throw new IllegalArgumentException ("Group not found");
         }
-
-
         // Check if user already has access
         Optional<ChatGroupAccessEntity> access = chatGroupAccessRepository.findUserExists(groupId, userId);
         if (access.isPresent()) {
             return access.get().getActive() ? "Already a member" : "Pending request";
         }
-
         // Create new access request
         ChatGroupAccessEntity newAccess = new ChatGroupAccessEntity();
         newAccess.setUserId(userId);
         newAccess.setChatGroup(group.get());
         //by default active is false
         chatGroupAccessRepository.save(newAccess);
-
         return "Request sent";
     }
 
