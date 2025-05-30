@@ -23,33 +23,37 @@ public class ChatService {
     @Autowired
     private ChatGroupAccessService chatGroupAccessService;
 
-    public Optional<List<ChatDTO>> getAllChatEntitiesByGroupId(int groupId,String userId) {
-
-        //check for group existence
-        Optional<ChatGroupEntity> group= chatGroupService.checkGroupExists(groupId);
+    public void validateGroupAndAccess(int groupId, String userId) {
+        Optional<ChatGroupEntity> group = chatGroupService.checkGroupExists(groupId);
         if (group.isEmpty()) {
-            throw new IllegalArgumentException ("Group not found");
+            throw new IllegalArgumentException("Group not found");
         }
-        //check if user has access to group
-       if (!chatGroupAccessService.checkUserAccess(groupId,userId)){
-           throw new IllegalArgumentException ("User has no access");
-       }
+        if (!chatGroupAccessService.checkUserAccess(groupId, userId)) {
+            throw new IllegalArgumentException("User has no access");
+        }
+    }
+
+    public Optional<List<ChatDTO>> getAllChatEntitiesByGroupId(int groupId,String userId) {
+        // Validate group and user access
+        validateGroupAndAccess(groupId, userId);
 
         Optional<List<ChatEntity>> chatEntityList= chatRepository.findAllActiveByGroupId(groupId);
         List<ChatDTO> chatDTOList=new ArrayList<>();
-       if(chatEntityList.isPresent()){
-           chatDTOList= chatEntityList.get().stream().map(chatEntity -> {
-               ChatDTO chatDTO=new ChatDTO();
-               chatDTO.setAllFieldsFromEntity(chatEntity);
-               return chatDTO;
-           }).collect(Collectors.toList());
-       }
+        if(chatEntityList.isPresent()){
+               chatDTOList= chatEntityList.get().stream().map(chatEntity -> {
+                   ChatDTO chatDTO=new ChatDTO();
+                   chatDTO.setAllFieldsFromEntity(chatEntity);
+                   return chatDTO;
+               }).collect(Collectors.toList());
+        }
        return Optional.of(chatDTOList);
     }
 
-    public ChatDTO createChatEntity(ChatEntity ChatEntity) {
+    public ChatDTO createChatEntity(ChatEntity chatEntity) {
+        // Validate group and user access
+        validateGroupAndAccess(chatEntity.getGroupId(), chatEntity.getCreatedBy());
         ChatDTO chatDTO=new ChatDTO();
-        chatDTO.setAllFieldsFromEntity( chatRepository.save(ChatEntity));
+        chatDTO.setAllFieldsFromEntity( chatRepository.save(chatEntity));
         return chatDTO;
     }
 
