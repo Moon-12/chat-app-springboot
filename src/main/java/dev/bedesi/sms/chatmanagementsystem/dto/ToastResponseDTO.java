@@ -1,5 +1,12 @@
 package dev.bedesi.sms.chatmanagementsystem.dto;
 
+
+import lombok.Getter;
+
+
+
+@Getter
+
 public class ToastResponseDTO {
     private final String message;
 
