@@ -17,7 +17,7 @@ public class ChatGroupController {
 
     @GetMapping("/getAllChatGroups")
     public ResponseEntity<?> getChatGroupByUserId(@RequestParam("user_id") String user_id) {
-        Optional<List<ChatGroupDTO>> chatGroupDTOList= chatGroupService.getAllChatGroupEntitiesByUserId(user_id);
+        Optional<List<ChatGroupDTO>> chatGroupDTOList= chatGroupService.getAllChatGroupEntitiesByUserId(user_id.toLowerCase());
         if (chatGroupDTOList.isPresent()) {
             Map<String, Object> response = new HashMap<>();
             response.put("data",chatGroupDTOList);

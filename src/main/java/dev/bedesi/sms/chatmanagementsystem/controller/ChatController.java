@@ -29,7 +29,7 @@ public class ChatController {
     @GetMapping("/getAllPreviousMessages")
     public ResponseEntity<GetChatApiResponseDTO> getAllPreviousMessagesByGroupId(@RequestParam("user_id") String userId,@RequestParam("group_id") int groupId) {
         try {
-            Optional<List<ChatDTO>> chatDTOList = chatService.getAllChatEntitiesByGroupId(groupId, userId);
+            Optional<List<ChatDTO>> chatDTOList = chatService.getAllChatEntitiesByGroupId(groupId, userId.toLowerCase());
             return chatDTOList.map(chatDTOS -> ResponseEntity.ok(new GetChatApiResponseDTO(chatDTOS, "Messages retrieved successfully"))).orElseGet(() -> ResponseEntity.status(404).body(new GetChatApiResponseDTO("No messages found for the given group and user")));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new GetChatApiResponseDTO(e.getMessage()));
@@ -42,7 +42,7 @@ public class ChatController {
     // Endpoint to subscribe to messages using SSE
     @GetMapping(value = "/getLatestMessage", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribeToGroup(@RequestParam("group_id") int groupId,@RequestParam("user_id") String userId) {
-        chatService.validateGroupAndAccess(groupId,userId);
+        chatService.validateGroupAndAccess(groupId,userId.toLowerCase());
 
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         groupEmitters.computeIfAbsent(groupId, k -> new CopyOnWriteArrayList<>()).add(emitter);
