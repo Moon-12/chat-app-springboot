@@ -1,0 +1,27 @@
+package dev.bedesi.sms.chatmanagementsystem.dto;
+
+import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
+import lombok.Data;
+
+import java.sql.Timestamp;
+
+@Data
+public class ChatDTO implements TranslateDTO<ChatEntity> {
+    private int id;
+    private String message;
+    private String createdBy;
+    private Timestamp createdAt;
+    private int groupId;
+
+
+
+    @Override
+    public void setAllFieldsFromEntity(ChatEntity chatEntity) {
+        this.id=chatEntity.getId();
+        this.createdBy=chatEntity.getCreatedBy();
+        this.createdAt=chatEntity.getCreatedAt();
+        this.message=chatEntity.getMessage();
+        this.groupId=chatEntity.getGroupId();
+
+    }
+}

@@ -1,0 +1,13 @@
+package dev.bedesi.sms.chatmanagementsystem;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ChatmanagementsystemApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

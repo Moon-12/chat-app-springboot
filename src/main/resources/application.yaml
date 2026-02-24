@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: ${CHAT_APP_PROFILE}
+server:
+  servlet:
+    context-path: /chat-app-api

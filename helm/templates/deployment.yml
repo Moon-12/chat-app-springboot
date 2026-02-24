@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-container
+          image: my-local-registry.example.com:5000/{{ .Chart.Name }}:{{ .Chart.AppVersion }}
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+          env:
+            - name: CHAT_APP_PROFILE
+              value: prod
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chat-secrets
+                  key: mysql_secret
+            - name: SERVER_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-config-map
+                  key: server_key
