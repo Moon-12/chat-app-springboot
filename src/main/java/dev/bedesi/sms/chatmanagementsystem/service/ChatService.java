@@ -3,13 +3,13 @@ import dev.bedesi.sms.chatmanagementsystem.dto.ChatDTO;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatGroupEntity;
 import dev.bedesi.sms.chatmanagementsystem.mysql.repository.ChatRepository;
+import dev.bedesi.sms.chatmanagementsystem.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -25,28 +25,31 @@ public class ChatService {
 
     public void validateGroupAndAccess(int groupId, String userId) {
         Optional<ChatGroupEntity> group = chatGroupService.checkGroupExists(groupId);
+        // 404 → Group not found
         if (group.isEmpty()) {
-            throw new IllegalArgumentException("Group not found");
+            throw new NoSuchElementException("Group not found");
         }
+        // 403 → User has no access
         if (!chatGroupAccessService.checkUserAccess(groupId, userId)) {
-            throw new IllegalArgumentException("User has no access");
+            throw new SecurityException("You are not authorized to access this group");
         }
     }
-
-    public Optional<List<ChatDTO>> getAllChatEntitiesByGroupId(int groupId,String userId) {
-        // Validate group and user access
-        validateGroupAndAccess(groupId, userId);
+    public List<ChatDTO> getAllChatEntitiesByGroupId(int groupId) {
+        // 403 → user not allowed
+        validateGroupAndAccess(groupId, AuthUtil.getCurrentUserEmail());
 
         Optional<List<ChatEntity>> chatEntityList= chatRepository.findAllActiveByGroupId(groupId);
-        List<ChatDTO> chatDTOList=new ArrayList<>();
-        if(chatEntityList.isPresent()){
-               chatDTOList= chatEntityList.get().stream().map(chatEntity -> {
+
+        // 404 → no messages
+        if (chatEntityList.isEmpty() || chatEntityList.get().isEmpty()) {
+            return List.of();
+        }
+
+        return chatEntityList.get().stream().map(chatEntity -> {
                    ChatDTO chatDTO=new ChatDTO();
                    chatDTO.setAllFieldsFromEntity(chatEntity);
                    return chatDTO;
-               }).collect(Collectors.toList());
-        }
-       return Optional.of(chatDTOList);
+               }).toList();
     }
 
     public ChatDTO createChatEntity(ChatEntity chatEntity) {

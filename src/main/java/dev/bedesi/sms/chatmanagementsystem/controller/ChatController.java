@@ -7,6 +7,7 @@ import dev.bedesi.sms.chatmanagementsystem.dto.ToastResponseDTO;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import dev.bedesi.sms.chatmanagementsystem.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,14 +28,29 @@ public class ChatController {
     private final Map<Integer, List<SseEmitter>> groupEmitters = new ConcurrentHashMap<>();
 
     @GetMapping("/getAllPreviousMessages")
-    public ResponseEntity<GetChatApiResponseDTO> getAllPreviousMessagesByGroupId(@RequestParam("user_id") String userId,@RequestParam("group_id") int groupId) {
+    public ResponseEntity<GetChatApiResponseDTO> getAllPreviousMessagesByGroupId(
+            @RequestParam("group_id") int groupId) {
         try {
-            Optional<List<ChatDTO>> chatDTOList = chatService.getAllChatEntitiesByGroupId(groupId, userId.toLowerCase());
-            return chatDTOList.map(chatDTOS -> ResponseEntity.ok(new GetChatApiResponseDTO(chatDTOS, "Messages retrieved successfully"))).orElseGet(() -> ResponseEntity.status(404).body(new GetChatApiResponseDTO("No messages found for the given group and user")));
+            List<ChatDTO> chatDTOList = chatService.getAllChatEntitiesByGroupId(groupId);
+
+            String message = chatDTOList.isEmpty()
+                    ? "No messages found for this group"
+                    : "Messages retrieved successfully";
+
+            return ResponseEntity.ok(new GetChatApiResponseDTO(chatDTOList, message)
+            );
+        } catch (SecurityException e) {
+            // 403
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new GetChatApiResponseDTO(HttpStatus.FORBIDDEN,e.getMessage()));
+        } catch (NoSuchElementException e) {
+            // 404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GetChatApiResponseDTO(HttpStatus.NOT_FOUND,e.getMessage()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new GetChatApiResponseDTO(e.getMessage()));
+            // 400
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GetChatApiResponseDTO(HttpStatus.BAD_REQUEST,e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new GetChatApiResponseDTO("An error occurred while processing the request"));
+            // 500
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GetChatApiResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR,"An error occurred while processing the request"));
         }
     }
 
