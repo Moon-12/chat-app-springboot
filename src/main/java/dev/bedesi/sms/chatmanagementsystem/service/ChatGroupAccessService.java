@@ -4,6 +4,7 @@ import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatGroupAccessEntity;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatGroupEntity;
 import dev.bedesi.sms.chatmanagementsystem.mysql.repository.ChatGroupAccessRepository;
 import dev.bedesi.sms.chatmanagementsystem.mysql.repository.ChatGroupRepository;
+import dev.bedesi.sms.chatmanagementsystem.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class ChatGroupAccessService {
 
     public String joinGroup(JoinGroupDTO joinGroupRequestObj) {
         int groupId = joinGroupRequestObj.getGroupId();
-        String userId = joinGroupRequestObj.getUserId();
+        String userId = AuthUtil.getCurrentUserEmail();
 
         // Validate group existence
         Optional<ChatGroupEntity> group= chatGroupService.checkGroupExists(groupId);
