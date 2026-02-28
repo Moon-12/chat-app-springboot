@@ -3,16 +3,18 @@ package dev.bedesi.sms.chatmanagementsystem.controller;
 import dev.bedesi.sms.chatmanagementsystem.dto.ChatDTO;
 import dev.bedesi.sms.chatmanagementsystem.dto.GetChatApiResponseDTO;
 
-import dev.bedesi.sms.chatmanagementsystem.dto.ToastResponseDTO;
+import dev.bedesi.sms.chatmanagementsystem.dto.PostMessageResponseDTO;
 import dev.bedesi.sms.chatmanagementsystem.mysql.entity.ChatEntity;
 import dev.bedesi.sms.chatmanagementsystem.service.ChatService;
+import dev.bedesi.sms.chatmanagementsystem.utils.AuthUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class ChatController {
     ChatService chatService;
 
     private final Map<Integer, List<SseEmitter>> groupEmitters = new ConcurrentHashMap<>();
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     @GetMapping("/getAllPreviousMessages")
     public ResponseEntity<GetChatApiResponseDTO> getAllPreviousMessagesByGroupId(
@@ -57,20 +61,47 @@ public class ChatController {
 
     // Endpoint to subscribe to messages using SSE
     @GetMapping(value = "/getLatestMessage", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribeToGroup(@RequestParam("group_id") int groupId,@RequestParam("user_id") String userId) {
-        chatService.validateGroupAndAccess(groupId,userId.toLowerCase());
+    public SseEmitter subscribeToGroup(@RequestParam("group_id") int groupId) {
+        logger.info("/getLatestMessage {}", groupId);
+        logger.info("user {}", AuthUtil.getCurrentUserEmail());
 
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        chatService.validateGroupAndAccess(groupId, AuthUtil.getCurrentUserEmail());
+
+        SseEmitter emitter = new SseEmitter(0L);
         groupEmitters.computeIfAbsent(groupId, k -> new CopyOnWriteArrayList<>()).add(emitter);
 
-        emitter.onCompletion(() -> groupEmitters.getOrDefault(groupId, List.of()).remove(emitter));
-        emitter.onTimeout(() -> groupEmitters.getOrDefault(groupId, List.of()).remove(emitter));
-        emitter.onError((e) -> groupEmitters.getOrDefault(groupId, List.of()).remove(emitter));
+        try {
+            emitter.send(SseEmitter.event()
+                    .comment("connected")   // <-- opens the stream
+            );
+        } catch (IOException e) {
+            emitter.completeWithError(e);
+        }
+
+        emitter.onCompletion(() -> groupEmitters.get(groupId).remove(emitter));
+        emitter.onTimeout(() -> groupEmitters.get(groupId).remove(emitter));
+        emitter.onError(e -> groupEmitters.get(groupId).remove(emitter));
+
+        //Optional and not a recommended way too much overhead on backend: send a heartbeat to keep connection alive
+//        ScheduledFuture<?> heartbeatTask = heartbeatScheduler.scheduleAtFixedRate(
+//                () -> {
+//                    try {
+//                        emitter.send(SseEmitter.event().name("heartbeat").data("ping"));
+//                    } catch (IOException e) {
+//                        emitter.completeWithError(e);
+//                    }
+//                },
+//                Instant.now().plusSeconds(60),  // start after 20s
+//                Duration.ofSeconds(60)          // repeat every 20s
+//        );
+
+
         return emitter;
     }
 
     @PostMapping("/postMessageToGroup")
-    public ResponseEntity<ToastResponseDTO> postTweet(@RequestBody ChatEntity chatEntity) {
+    public ResponseEntity<PostMessageResponseDTO> postTweet(@RequestBody ChatEntity chatEntity) {
+        logger.info("chat entity {}",chatEntity);
         try {
             //save to db
             ChatDTO chatDTO = chatService.createChatEntity(chatEntity);
@@ -90,13 +121,14 @@ public class ChatController {
                     }
                 }
             }
-            return ResponseEntity.ok(new ToastResponseDTO("Message posted successfully!"));
+            return ResponseEntity.ok(new PostMessageResponseDTO(chatDTO,"Message posted successfully!"));
         }
         catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ToastResponseDTO(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new PostMessageResponseDTO(HttpStatus.BAD_REQUEST,e.getMessage()));
         }
         catch (Exception e) {
-            return ResponseEntity.status(500).body(new ToastResponseDTO("An error occurred while processing the request"));
+            logger.error("Error posting message: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new PostMessageResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR,"An error occurred while processing the request"));
         }
 
     }
