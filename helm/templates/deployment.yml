@@ -34,8 +34,3 @@ spec:
                 secretKeyRef:
                   name: chat-secrets
                   key: mysql_secret
-            - name: SERVER_KEY
-              valueFrom:
-                configMapKeyRef:
-                  name: chat-config-map
-                  key: server_key
